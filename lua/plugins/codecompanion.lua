@@ -30,7 +30,7 @@ return {
                 default = "gemini-2.0-flash-exp", -- Currently the only available model
               },
               temperature = {
-                default = 0.1, -- Lower temperature for more focused coding responses
+                default = 0.8, -- Lower temperature for more focused coding responses
               },
             },
           })
