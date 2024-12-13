@@ -6,7 +6,16 @@ return {
     config = function()
       local neocodeium = require("neocodeium")
       neocodeium.setup()
-      vim.keymap.set("i", "<tab>", neocodeium.accept)
+
+      -- Smart tab mapping that checks for completion availability
+      vim.keymap.set("i", "<tab>", function()
+        if neocodeium.visible() then
+          return neocodeium.accept()
+        else
+          return "<tab>"
+        end
+      end, { expr = true })
+
       vim.keymap.set("i", "<A-w>", neocodeium.accept_word)
       vim.keymap.set("i", "<A-a>", neocodeium.accept_line)
       vim.keymap.set("i", "<A-e>", neocodeium.cycle_or_complete)
