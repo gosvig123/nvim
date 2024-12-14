@@ -13,9 +13,9 @@ return {
       backends = {
         get_coq = require("aider.backend").get_coq,
         get_gemini = function()
-          return require("prompt_engineer").google
+          return require("nui").google
         end,
-        get_llm = require("aider.backend").get_llm, -- Keep this line for other LLM options
+        get_llm = require("aider.backend").get_llm,
       },
       chat_model = "gemini-1.5-flash-latest",
       default_prompts = {
