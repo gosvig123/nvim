@@ -20,7 +20,7 @@ require("lazy").setup({
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins
     { import = "plugins" },
-    { import = "prompt_engineer" }, -- Add prompt_engineer to the plugin spec
+    { "jackielii/prompt_engineer.nvim" }, -- Add prompt_engineer to the plugin spec
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.

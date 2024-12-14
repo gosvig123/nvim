@@ -1,5 +1,6 @@
 return {
     "jackielii/prompt_engineer.nvim",
+    event = "VeryLazy",
     config = function()
         require("prompt_engineer").setup({
             -- Options for prompt_engineer.nvim
