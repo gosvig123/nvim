@@ -10,6 +10,13 @@ return {
       auto_manage_context = true,
       default_bindings = true,
       debug = true,
+      backends = {
+        get_coq = require("aider.backend").get_coq,
+        get_gemini = function()
+          return require("prompt_engineer").google
+        end,
+        get_llm = require("aider.backend").get_llm, -- Keep this line for other LLM options
+      },
       chat_model = "gemini-1.5-flash-latest",
       default_prompts = {
         code_edit = "Please help me edit the code to accomplish the following:",
