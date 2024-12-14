@@ -50,4 +50,32 @@ require("lazy").setup({
       },
     },
   },
+  ui = {
+    -- Disable all UI animations
+    border = "none",
+    icons = {
+      -- You can customize icons if needed
+      -- For example:
+      -- cmd = "⌘",
+      -- config = "🛠",
+      -- event = "⏰",
+      -- ft = "📄",
+      -- init = "🔥",
+      -- keys = "🔑",
+      -- lazy = "💤",
+      -- loaded = "✓",
+      -- not_loaded = "✗",
+      -- plugin = "🔌",
+      -- runtime = "⏳",
+      -- source = "📦",
+      -- start = "▶",
+      -- task = "📌",
+      -- list = {
+      --   "📜",
+      --   "📋",
+      --   "📝",
+      -- },
+    },
+    animations = false, -- Disable animations
+  },
 })
