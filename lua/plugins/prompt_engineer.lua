@@ -21,7 +21,7 @@ return {
         table.insert(files, current_file)
         return files
       end,
-      default_bindings = true, -- optional
+      default_bindings = true,
     })
   end,
 }
