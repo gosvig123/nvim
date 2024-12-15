@@ -20,7 +20,6 @@ require("lazy").setup({
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins
     { import = "plugins" },
-    { "MunifTanjim/nui.nvim" }, -- Add nui.nvim to the plugin spec
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -50,33 +49,12 @@ require("lazy").setup({
         "zipPlugin",
       },
     },
-  },
-  ui = {
-    -- Disable all UI animations
-    border = "none",
-    icons = {
-      -- You can customize icons if needed
-      -- For example:
-      -- cmd = "⌘",
-      -- config = "🛠",
-      -- event = "⏰",
-      -- ft = "📄",
-      -- init = "🔥",
-      -- keys = "🔑",
-      -- lazy = "💤",
-      -- loaded = "✓",
-      -- not_loaded = "✗",
-      -- plugin = "🔌",
-      -- runtime = "⏳",
-      -- source = "📦",
-      -- start = "▶",
-      -- task = "📌",
-      -- list = {
-      --   "📜",
-      --   "📋",
-      --   "📝",
-      -- },
+    cache = {
+      enabled = true,
+      -- Don't cache files in runtime path
+      path = vim.fn.stdpath("cache") .. "/lazy/cache",
+      -- Don't cache files from runtime
+      disable_events = { "VimEnter", "BufReadPre" },
     },
-    animations = false, -- Disable animations
   },
 })

@@ -25,3 +25,5 @@ vim.keymap.set("v", "el", function()
   local col = #line
   vim.api.nvim_win_set_cursor(0, { vim.fn.line("."), col })
 end)
+
+vim.api.nvim_set_keymap('n', '<leader>oa', '<cmd>lua AiderOpen()<cr>', {noremap = true, silent = true})

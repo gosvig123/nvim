@@ -3,6 +3,10 @@ return {
   {
     "monkoose/neocodeium",
     event = "VeryLazy",
+    opts = {
+      show_label = false,
+      max_lines = 1,
+    },
     config = function()
       local neocodeium = require("neocodeium")
       neocodeium.setup()
