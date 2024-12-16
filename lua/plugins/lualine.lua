@@ -77,7 +77,15 @@ return {
               end,
             }
           },
-          lualine_x = { "filetype" },
+          lualine_x = {
+            "filetype",
+            {
+              function()
+                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                return string.format("Ln %d, Col %d", row, col + 1)
+              end,
+            }
+          },
           lualine_y = {},
           lualine_z = {},
         },

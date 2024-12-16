@@ -39,8 +39,17 @@ return {
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
                 diagnosticMode = "workspace",
+                -- Disable reference notifications
+                diagnosticSeverityOverrides = {
+                  reportGeneralTypeIssues = "none",
+                  reportOptionalMemberAccess = "none",
+                },
               },
             },
+          },
+          -- Disable progress notifications
+          handlers = {
+            ["$/progress"] = function() end
           },
         },
       },
