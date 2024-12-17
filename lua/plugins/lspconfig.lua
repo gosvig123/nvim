@@ -3,10 +3,28 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        -- Configure TypeScript LSP
+        -- Add semantic token support for each language server
+        lua_ls = {
+          settings = {
+            Lua = {
+              semantic = {
+                enable = true,
+                annotations = true,
+                variables = true,
+              },
+            },
+          },
+        },
         tsserver = {
           settings = {
             typescript = {
+              format = {
+                indentSize = 2,
+                convertTabsToSpaces = true,
+                trimTrailingWhitespace = true,
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = true,
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = true,
+              },
               inlayHints = {
                 includeInlayParameterNameHints = 'all',
                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
@@ -14,21 +32,16 @@ return {
                 includeInlayVariableTypeHints = true,
                 includeInlayPropertyDeclarationTypeHints = true,
                 includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              }
+              },
             },
             javascript = {
-              inlayHints = {
-                includeInlayParameterNameHints = 'all',
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-              }
-            }
-          }
+              format = {
+                indentSize = 2,
+                convertTabsToSpaces = true,
+                trimTrailingWhitespace = true,
+              },
+            },
+          },
         },
         -- Python configuration
         pyright = {
@@ -39,11 +52,14 @@ return {
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
                 diagnosticMode = "workspace",
-                -- Disable reference notifications
-                diagnosticSeverityOverrides = {
-                  reportGeneralTypeIssues = "none",
-                  reportOptionalMemberAccess = "none",
+                inlayHints = {
+                  variableTypes = true,
+                  functionReturnTypes = true,
+                  parameterTypes = true,
                 },
+              },
+              formatting = {
+                provider = "black",
               },
             },
           },
