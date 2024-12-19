@@ -15,6 +15,13 @@ return {
             },
           },
         },
+        eslint = {
+          settings = {
+            format = {
+              enable = true,
+            },
+          },
+        },
         tsserver = {
           settings = {
             typescript = {
