@@ -58,3 +58,43 @@ require("lazy").setup({
     },
   },
 })
+
+-- Place in lua/config/autocmds.lua
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    local current_win = vim.api.nvim_get_current_win()
+    local current_buf = vim.api.nvim_get_current_buf()
+    local windows = vim.api.nvim_list_wins()
+
+    -- If there's only one window, proceed with buffer cleanup
+    if #windows == 1 then
+      local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+
+      for _, buf in ipairs(bufs) do
+        if buf.bufnr ~= current_buf and vim.bo[buf.bufnr].buftype == "" and vim.api.nvim_buf_is_valid(buf.bufnr) then
+          vim.api.nvim_buf_delete(buf.bufnr, { force = true })
+        end
+      end
+    else
+      -- For multiple windows, only clean buffers in current window
+      local win_bufs = {}
+      for _, win in ipairs(windows) do
+        if win ~= current_win then
+          win_bufs[vim.api.nvim_win_get_buf(win)] = true
+        end
+      end
+
+      local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+      for _, buf in ipairs(bufs) do
+        if
+          buf.bufnr ~= current_buf
+          and not win_bufs[buf.bufnr]
+          and vim.bo[buf.bufnr].buftype == ""
+          and vim.api.nvim_buf_is_valid(buf.bufnr)
+        then
+          vim.api.nvim_buf_delete(buf.bufnr, { force = true })
+        end
+      end
+    end
+  end,
+})

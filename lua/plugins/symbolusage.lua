@@ -1,12 +1,4 @@
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    print("Client capabilities:", vim.inspect(client.server_capabilities))
-  end,
-})
-
 return {
-
   {
     "Wansmer/symbol-usage.nvim",
     event = "LspAttach", -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
