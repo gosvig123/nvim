@@ -15,3 +15,11 @@ opt.shiftwidth = 2 -- Set indent width to 2 spaces
 opt.expandtab = true -- Use spaces instead of tabs
 opt.autoindent = true -- Enable auto-indenting
 opt.smartindent = true -- Enable smart indenting
+vim.opt.updatetime = 100  -- Faster completion
+vim.opt.timeoutlen = 300  -- Faster key sequence completion
+vim.opt.scrolloff = 8     -- Keep 8 lines above/below cursor
+vim.opt.sidescrolloff = 8 -- Keep 8 columns left/right of cursor
+vim.opt.clipboard = "unnamedplus"  -- Use system clipboard
+vim.opt.undofile = true   -- Persistent undo
+vim.opt.pumheight = 10    -- Maximum number of items in completion menu
+

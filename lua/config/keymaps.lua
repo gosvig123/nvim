@@ -27,3 +27,30 @@ vim.keymap.set("v", "el", function()
 end)
 
 vim.api.nvim_set_keymap("n", "<leader>oa", "<cmd>lua AiderOpen()<cr>", { noremap = true, silent = true })
+
+-- Remap leader cs to leader oo
+vim.keymap.set("n", "<leader>oo", function()
+  require('telescope.builtin').lsp_document_symbols({
+    layout_strategy = 'vertical',
+    layout_config = {
+      width = 0.45,
+      height = 0.95,
+      anchor = 'E',
+      prompt_position = 'top',
+      preview_cutoff = 0,
+      mirror = true,
+      preview_height = 0.7,
+    },
+    show_line = true,
+    jump_type = 'never',
+    symbols = {
+      'Class',
+      'Function',
+      'Method',
+      'Constructor',
+      'Interface',
+      'Module',
+      'Variable',
+    },
+  })
+end, { desc = "Document Symbols (right side)" })

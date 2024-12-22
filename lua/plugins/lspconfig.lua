@@ -2,6 +2,30 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      diagnostics = {
+        underline = true,
+        update_in_insert = true,
+        virtual_text = {
+          spacing = 4,
+          prefix = "●",
+        },
+        severity_sort = true,
+      },
+      inlay_hints = {
+        enabled = true,
+      },
+      capabilities = {
+        textDocument = {
+          completion = {
+            completionItem = {
+              snippetSupport = true,
+              commitCharactersSupport = true,
+              deprecatedSupport = true,
+              preselectSupport = true,
+            }
+          }
+        }
+      },
       servers = {
         -- Add semantic token support for each language server
         lua_ls = {
@@ -76,6 +100,20 @@ return {
           },
         },
       },
+      format = {
+        formatting_options = nil,
+        timeout_ms = 3000,
+      },
+      on_attach = function(client, bufnr)
+        if client.supports_method("textDocument/formatting") then
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.format({ bufnr = bufnr })
+            end,
+          })
+        end
+      end,
     },
   },
 }

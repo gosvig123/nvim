@@ -37,24 +37,22 @@ require("lazy").setup({
   }, -- automatically check for plugin updates
   performance = {
     rtp = {
-      -- disable some rtp plugins
+      reset = false,
+      paths = {},
       disabled_plugins = {
         "gzip",
-        -- "matchit",
-        -- "matchparen",
-        -- "netrwPlugin",
         "tarPlugin",
         "tohtml",
         "tutor",
         "zipPlugin",
+        "netrwPlugin",
+        "matchparen",
       },
     },
     cache = {
       enabled = true,
-      -- Don't cache files in runtime path
       path = vim.fn.stdpath("cache") .. "/lazy/cache",
-      -- Don't cache files from runtime
-      disable_events = { "VimEnter", "BufReadPre" },
+      timeout = 10000,
     },
   },
 })
