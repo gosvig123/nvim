@@ -65,6 +65,40 @@ return {
         hl.DiagnosticWarn = { fg = "#fab387" }   -- Soft orange
         hl.DiagnosticInfo = { fg = "#89b4fa" }   -- Ice blue
         hl.DiagnosticHint = { fg = "#94e2d5" }   -- Ice teal
+
+        -- Enhanced active line highlighting
+        hl.CursorLine = {
+          bg = "#232433",
+          sp = "#7dcfff",  -- Add a border color
+          underline = true,
+          bold = true,
+        }
+
+        -- Make the line number stand out more
+        hl.CursorLineNr = {
+          fg = "#7dcfff",
+          bg = "#232433",
+          bold = true,
+          italic = true,
+        }
+
+        -- Add a sign column indicator
+        hl.CursorLineSign = {
+          bg = "#232433",
+          sp = "#7dcfff",
+          underline = true
+        }
+
+        -- Add a right border indicator
+        hl.CursorColumn = {
+          bg = "#232433",
+        }
+
+        -- Enhance the color of text on the current line
+        hl.CursorLineFold = {
+          fg = "#7dcfff",
+          bold = true,
+        }
       end,
     },
   },

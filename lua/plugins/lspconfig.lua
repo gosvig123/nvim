@@ -63,6 +63,8 @@ return {
                 includeInlayVariableTypeHints = true,
                 includeInlayPropertyDeclarationTypeHints = true,
                 includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+                includeInlayVariableTypeHintsWhenTypeMatchesName = true,
               },
             },
             javascript = {
@@ -87,6 +89,8 @@ return {
                   variableTypes = true,
                   functionReturnTypes = true,
                   parameterTypes = true,
+                  classVariableTypes = true,
+                  variableTypes = true,
                 },
               },
               formatting = {
