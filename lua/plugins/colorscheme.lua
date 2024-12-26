@@ -31,11 +31,14 @@ return {
         colors.magenta = "#cba6f7" -- Soft purple
         colors.green = "#a6e3a1"   -- Mint green
         colors.teal = "#94e2d5"    -- Ice teal
+        colors.comment = "#768390" -- Brighter comment color for better readability
 
         -- Softer UI elements
         colors.border = "#313244"
-        colors.comment = "#9399b2"
         colors.fg_gutter = "#45475a"
+
+        -- Add a new color for unused components
+        colors.unused = "#959cbd"  -- More visible gray with slight blue tint
       end,
       on_highlights = function(hl, c)
         -- Enhanced semantic highlighting with ice colors
@@ -99,6 +102,23 @@ return {
           fg = "#7dcfff",
           bold = true,
         }
+
+        -- Add new highlights for unused variables and components
+        hl["@variable.unused"] = { fg = c.unused, italic = true }
+        hl["@parameter.unused"] = { fg = c.unused, italic = true }
+        hl["@function.unused"] = { fg = c.unused, italic = true }
+        hl["@method.unused"] = { fg = c.unused, italic = true }
+
+        -- Make diagnostic hints more visible
+        hl.DiagnosticHint = { fg = c.unused }
+        hl.DiagnosticUnnecessary = { fg = c.unused }
+
+        -- Enhance comment visibility
+        hl.Comment = { fg = c.comment, italic = true }
+
+        -- Add inlay hint highlighting
+        hl.LspInlayHint = { fg = "#565f89", italic = true }
+        hl.InlayHint = { fg = "#565f89", italic = true }
       end,
     },
   },
