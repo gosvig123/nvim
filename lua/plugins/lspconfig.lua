@@ -22,9 +22,9 @@ return {
               commitCharactersSupport = true,
               deprecatedSupport = true,
               preselectSupport = true,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       servers = {
         -- Add semantic token support for each language server
@@ -46,6 +46,20 @@ return {
             },
           },
         },
+        pylsp = {
+          enabled = false,
+          autostart = false,
+          settings = {
+            pylsp = {
+              enabled = false,
+              plugins = {
+                all = {
+                  enabled = false
+                }
+              }
+            },
+          },
+        },
         tsserver = {
           settings = {
             typescript = {
@@ -57,7 +71,7 @@ return {
                 insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = true,
               },
               inlayHints = {
-                includeInlayParameterNameHints = 'all',
+                includeInlayParameterNameHints = "all",
                 includeInlayParameterNameHintsWhenArgumentMatchesName = false,
                 includeInlayFunctionParameterTypeHints = true,
                 includeInlayVariableTypeHints = true,
@@ -86,7 +100,6 @@ return {
                 useLibraryCodeForTypes = true,
                 diagnosticMode = "workspace",
                 inlayHints = {
-                  variableTypes = true,
                   functionReturnTypes = true,
                   parameterTypes = true,
                   classVariableTypes = true,
@@ -100,7 +113,7 @@ return {
           },
           -- Disable progress notifications
           handlers = {
-            ["$/progress"] = function() end
+            ["$/progress"] = function() end,
           },
         },
       },
