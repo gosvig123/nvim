@@ -31,7 +31,7 @@ return {
         },
         prettier = {
           prepend_args = {
-            "--print-width=100",
+            "--print-width=120",
             "--tab-width=2",
             "--single-quote",
             "--trailing-comma=es5",
@@ -40,7 +40,20 @@ return {
         black = {
           prepend_args = {
             "--line-length=120",
-            "--skip-string-normalization",
+            "--fast",
+            "--preview",
+            "--quiet",
+          },
+        },
+        isort = {
+          prepend_args = {
+            "--profile=black",
+            "--line-length=88",
+            "--multi-line=3",
+            "--lines-after-imports=2",
+            "--lines-between-types=1",
+            "--combine-as",
+            "--case-sensitive=true",
           },
         },
         shfmt = {
@@ -55,6 +68,31 @@ return {
           prepend_args = {
             "--config",
             ".eslintrc.js",
+          },
+        },
+        prettierd = {
+          prepend_args = {
+            "--print-width=120",
+            "--tab-width=2",
+            "--semi=true",
+            "--single-quote=true",
+            "--jsx-single-quote=true",
+            "--trailing-comma=es5",
+            "--bracket-spacing=true",
+            "--arrow-parens=always",
+          },
+        },
+        eslint_d = {
+          prepend_args = {
+            "--fix",
+            "--cache",
+          },
+        },
+        ruff = {
+          prepend_args = {
+            "--line-length=88",
+            "--fix",
+            "--exit-zero",
           },
         },
       },

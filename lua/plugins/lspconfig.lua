@@ -44,7 +44,34 @@ return {
             format = {
               enable = true,
             },
+            workingDirectory = { mode = "location" },
+            quiet = true,
+            onIgnoredFiles = "off",
+            problems = {
+              shortenToSingleLine = true
+            },
+            validate = "on",
+            rulesCustomizations = {
+              {
+                rule = "*",
+                severity = "warn"
+              }
+            }
           },
+          handlers = {
+            ["window/showMessageRequest"] = function(_, result)
+              return result
+            end,
+            ["textDocument/diagnostic"] = function(err, result, ctx, config)
+              if err then return end
+              if result and result.diagnostics then
+                result.diagnostics = vim.tbl_filter(function(diagnostic)
+                  return not diagnostic.message:match("Failed to load config \"airbnb%-base\"")
+                end, result.diagnostics)
+              end
+              vim.lsp.handlers["textDocument/diagnostic"](err, result, ctx, config)
+            end
+          }
         },
         pylsp = {
           enabled = false,
@@ -69,16 +96,16 @@ return {
                 trimTrailingWhitespace = true,
                 insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces = true,
                 insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = true,
+                insertSpaceAfterKeywordsInControlFlowStatements = true,
+                insertSpaceAfterFunctionKeywordForAnonymousFunctions = true,
+                insertSpaceBeforeFunctionParenthesis = false,
+                insertSpaceAfterCommaDelimiter = true,
+                insertSpaceAfterSemicolonInForStatements = true,
+                insertSpaceBeforeAndAfterBinaryOperators = true,
               },
-              inlayHints = {
-                includeInlayParameterNameHints = "all",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
-                includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+              preferences = {
+                quoteStyle = "single",
+                importModuleSpecifierPreference = "shortest",
               },
             },
             javascript = {
