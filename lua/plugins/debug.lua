@@ -27,29 +27,33 @@ return {
     config = function()
       local status_ok, dap = pcall(require, "dap")
       if not status_ok then
+        vim.notify("Failed to load nvim-dap", vim.log.levels.ERROR)
         return
       end
 
-      local dapui = require("dapui")
+      local status_ok_ui, dapui = pcall(require, "dapui")
+      if not status_ok_ui then
+        vim.notify("Failed to load nvim-dap-ui", vim.log.levels.ERROR)
+        return
+      end
 
       -- Set up UI
       dapui.setup({
         layouts = {
           {
             elements = {
-              { id = "scopes", size = 0.55 },
-              { id = "breakpoints", size = 0.20 },
-              { id = "stacks", size = 0.25 },
+              { id = "scopes", size = 0.5 },      -- Variables and scope info
+              { id = "watches", size = 0.5 },      -- Watch expressions
             },
             position = "right",
             size = 40,
           },
           {
             elements = {
-              { id = "repl", size = 1 },
+              { id = "repl", size = 1 },          -- Debug REPL
             },
             position = "top",
-            size = 15,
+            size = 20,
           },
         },
       })
@@ -166,7 +170,6 @@ return {
       vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into" })
       vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step Over" })
       vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step Out" })
-      vim.keymap.set("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
       vim.keymap.set("n", "<leader>dl", dap.run_last, { desc = "Run Last" })
       vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Toggle UI" })
       vim.keymap.set("n", "<leader>dx", dap.terminate, { desc = "Terminate" })
@@ -185,6 +188,12 @@ return {
           })
         end
       end, { desc = "Start Debugging" })
+
+      -- Keep your watch expression keymap
+      vim.keymap.set("n", "<leader>dw", function()
+        local expr = vim.fn.input("Watch expression: ")
+        require("dapui").elements.watches.add(expr)
+      end, { desc = "Add Watch Expression" })
     end,
   },
 }
