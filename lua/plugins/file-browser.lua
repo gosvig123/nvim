@@ -5,6 +5,8 @@ return {
     "nvim-lua/plenary.nvim",
   },
   config = function()
+    local fb_actions = require("telescope").extensions.file_browser.actions
+
     require("telescope").setup({
       extensions = {
         file_browser = {
@@ -39,6 +41,23 @@ return {
             prompt_position = "bottom",
           },
           sorting_strategy = "ascending",
+          mappings = {
+            ["i"] = {
+              ["<A-c>"] = fb_actions.create,
+              ["<S-CR>"] = fb_actions.create_from_prompt,
+              ["<A-r>"] = fb_actions.rename,
+              ["<A-m>"] = fb_actions.move,
+              ["<A-y>"] = fb_actions.copy,
+              ["<A-d>"] = fb_actions.remove,
+            },
+            ["n"] = {
+              ["a"] = fb_actions.create,
+              ["r"] = fb_actions.rename,
+              ["m"] = fb_actions.move,
+              ["y"] = fb_actions.copy,
+              ["d"] = fb_actions.remove,
+            },
+          },
         },
       },
     })

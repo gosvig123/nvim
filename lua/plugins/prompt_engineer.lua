@@ -39,10 +39,22 @@ return {
         local dir = vim.fn.expand("%:p:h")
         local extensions = { ".lua", ".py", ".txt", ".js", ".ts", ".jsx", ".tsx" }
 
+        -- Helper function to check if file is already in context
+        local function is_file_in_context(file_path)
+          for _, existing_file in ipairs(diagnostic_context.files) do
+            if existing_file == file_path then
+              return true
+            end
+          end
+          return false
+        end
+
         for _, ext in ipairs(extensions) do
           local found_files = vim.fn.glob(dir .. "/*" .. ext, true, true)
           for _, f in ipairs(found_files) do
-            table.insert(diagnostic_context.files, f)
+            if not is_file_in_context(f) then
+              table.insert(diagnostic_context.files, f)
+            end
           end
         end
 
