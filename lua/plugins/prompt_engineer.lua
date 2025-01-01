@@ -1,7 +1,43 @@
 return {
   "joshuavial/aider.nvim",
   event = "VeryLazy",
+  dependencies = {
+    "nvim-lua/plenary.nvim", -- For system commands
+  },
   config = function()
+    -- Check for required Python packages
+    local function ensure_dependencies()
+      local Job = require("plenary.job")
+
+      -- Check Python installation
+      local python_cmd = vim.fn.executable("python3") == 1 and "python3" or "python"
+
+      -- Required packages with specific versions
+      local packages = {
+        "openai>=1.0.0",
+        "litellm>=1.0.0",
+      }
+
+      -- Install or upgrade packages
+      for _, package in ipairs(packages) do
+        Job:new({
+          command = python_cmd,
+          args = {"-m", "pip", "install", "--upgrade", package},
+          on_exit = function(j, return_val)
+            if return_val ~= 0 then
+              vim.notify(
+                "Failed to install " .. package .. ". Please install manually.",
+                vim.log.levels.ERROR
+              )
+            end
+          end,
+        }):sync()
+      end
+    end
+
+    -- Ensure dependencies before setup
+    ensure_dependencies()
+
     require("aider").setup({
       auto_manage_context = function()
         local current_bufnr = vim.api.nvim_get_current_buf()
@@ -63,14 +99,13 @@ return {
       default_bindings = true,
     })
 
-    -- Create autocmd to refresh context when diagnostics change
     vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufWritePost" }, {
       callback = function()
-        -- Force aider to refresh context
         if require("aider").refresh_context then
           require("aider").refresh_context()
         end
       end,
     })
+
   end,
 }

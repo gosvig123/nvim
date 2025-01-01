@@ -17,108 +17,78 @@ return {
       },
       -- Ice-themed color modifications
       on_colors = function(colors)
-        -- Cooler background colors
-        colors.bg = "#1a1b26"
-        colors.bg_dark = "#16161e"
-        colors.bg_float = "#1e1e2e"
-        colors.bg_popup = "#1e1e2e"
-        colors.bg_sidebar = "#16161e"
+        -- Darker background colors
+        colors.bg = "#0a0b12"        -- Darker main background
+        colors.bg_dark = "#070810"   -- Even darker background
+        colors.bg_float = "#0d0e16"  -- Darker float background
+        colors.bg_popup = "#0d0e16"  -- Darker popup background
+        colors.bg_sidebar = "#070810" -- Darker sidebar
 
-        -- Ice-themed accent colors
-        colors.blue = "#89b4fa"    -- Lighter, ice blue
-        colors.cyan = "#89dceb"    -- Ice cyan
-        colors.purple = "#b4befe"  -- Soft lavender
-        colors.magenta = "#cba6f7" -- Soft purple
-        colors.green = "#a6e3a1"   -- Mint green
-        colors.teal = "#94e2d5"    -- Ice teal
-        colors.comment = "#768390" -- Brighter comment color for better readability
+        -- Higher contrast accent colors
+        colors.blue = "#89d1fa"      -- Brighter blue
+        colors.cyan = "#7aecff"      -- Brighter cyan
+        colors.purple = "#c8b3ff"    -- Brighter purple
+        colors.magenta = "#ff92f0"   -- Brighter magenta
+        colors.green = "#95ffa4"     -- Brighter green
+        colors.teal = "#92ffe1"      -- Brighter teal
+        colors.comment = "#506178"   -- More visible comments
 
-        -- Softer UI elements
-        colors.border = "#313244"
-        colors.fg_gutter = "#45475a"
-
-        -- Add a new color for unused components
-        colors.unused = "#959cbd"  -- More visible gray with slight blue tint
+        -- Higher contrast UI elements
+        colors.border = "#1f2133"
+        colors.fg_gutter = "#3b3d57"
+        colors.unused = "#959cbd"
       end,
       on_highlights = function(hl, c)
-        -- Enhanced semantic highlighting with ice colors
+        -- Enhanced semantic highlighting with higher contrast
         hl.Type = { fg = c.blue, italic = true }
         hl.Function = { fg = c.magenta, bold = true }
         hl.Keyword = { fg = c.purple, italic = true }
-        hl.Constant = { fg = "#fab387" }  -- Soft orange
+        hl.Constant = { fg = "#ffb387" }  -- Brighter orange
         hl.String = { fg = c.green }
         hl.Variable = { fg = c.cyan }
 
-        -- Enhance treesitter highlights
+        -- Enhanced treesitter highlights
         hl["@variable"] = { fg = c.cyan }
         hl["@function"] = { fg = c.magenta, bold = true }
         hl["@keyword"] = { fg = c.purple, italic = true }
         hl["@type"] = { fg = c.blue, italic = true }
         hl["@property"] = { fg = c.teal }
-        hl["@parameter"] = { fg = "#cdd6f4" }  -- Soft white
+        hl["@parameter"] = { fg = "#e6eaf4" }  -- Brighter white
 
-        -- UI element highlights
-        hl.LineNr = { fg = "#585b70" }
-        hl.CursorLine = { bg = "#1e1e2e" }
-        hl.CursorLineNr = { fg = "#cdd6f4" }
-        hl.Visual = { bg = "#313244" }
+        -- UI element highlights with more contrast
+        hl.LineNr = { fg = "#4a4d6a" }
+        hl.CursorLine = { bg = "#131520" }
+        hl.CursorLineNr = { fg = "#e6eaf4" }
+        hl.Visual = { bg = "#252842" }
 
-        -- Diagnostic colors
-        hl.DiagnosticError = { fg = "#f38ba8" }  -- Soft red
-        hl.DiagnosticWarn = { fg = "#fab387" }   -- Soft orange
-        hl.DiagnosticInfo = { fg = "#89b4fa" }   -- Ice blue
-        hl.DiagnosticHint = { fg = "#94e2d5" }   -- Ice teal
+        -- Brighter diagnostic colors
+        hl.DiagnosticError = { fg = "#ff7a93" }  -- Brighter red
+        hl.DiagnosticWarn = { fg = "#ffb387" }   -- Brighter orange
+        hl.DiagnosticInfo = { fg = "#89d1fa" }   -- Brighter blue
+        hl.DiagnosticHint = { fg = "#92ffe1" }   -- Brighter teal
 
         -- Enhanced active line highlighting
         hl.CursorLine = {
-          bg = "#232433",
-          sp = "#7dcfff",  -- Add a border color
+          bg = "#131520",
+          sp = "#7dcfff",
           underline = true,
           bold = true,
         }
 
-        -- Make the line number stand out more
+        -- Brighter line number
         hl.CursorLineNr = {
           fg = "#7dcfff",
-          bg = "#232433",
+          bg = "#131520",
           bold = true,
           italic = true,
         }
 
-        -- Add a sign column indicator
-        hl.CursorLineSign = {
-          bg = "#232433",
-          sp = "#7dcfff",
-          underline = true
-        }
-
-        -- Add a right border indicator
-        hl.CursorColumn = {
-          bg = "#232433",
-        }
-
-        -- Enhance the color of text on the current line
-        hl.CursorLineFold = {
-          fg = "#7dcfff",
-          bold = true,
-        }
-
-        -- Add new highlights for unused variables and components
-        hl["@variable.unused"] = { fg = c.unused, italic = true }
-        hl["@parameter.unused"] = { fg = c.unused, italic = true }
-        hl["@function.unused"] = { fg = c.unused, italic = true }
-        hl["@method.unused"] = { fg = c.unused, italic = true }
-
-        -- Make diagnostic hints more visible
-        hl.DiagnosticHint = { fg = c.unused }
-        hl.DiagnosticUnnecessary = { fg = c.unused }
-
-        -- Enhance comment visibility
+        -- Enhanced comment visibility
         hl.Comment = { fg = c.comment, italic = true }
 
-        -- Add inlay hint highlighting
-        hl.LspInlayHint = { fg = "#565f89", italic = true }
-        hl.InlayHint = { fg = "#565f89", italic = true }
+        -- Brighter inlay hints
+        hl.LspInlayHint = { fg = "#6b7394", italic = true }
+        hl.InlayHint = { fg = "#6b7394", italic = true }
       end,
     },
   },
