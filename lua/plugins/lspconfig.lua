@@ -143,6 +143,37 @@ return {
             ["$/progress"] = function() end,
           },
         },
+        cssls = {
+          settings = {
+            css = {
+              validate = true,
+              lint = {
+                unknownAtRules = "ignore"
+              },
+              completion = {
+                completePropertyWithSemicolon = true,
+                triggerPropertyValueCompletion = true
+              },
+              format = {
+                enable = true,
+                newlineBetweenSelectors = true,
+                newlineBetweenRules = true,
+                spaceAroundSelectorSeparator = true
+              }
+            }
+          }
+        },
+        stylelint_lsp = {
+          settings = {
+            stylelintplus = {
+              enable = true,
+              validateOnType = true,
+              validateOnSave = true,
+              autoFixOnFormat = true,
+              configFile = ".stylelintrc"
+            }
+          }
+        }
       },
       format = {
         formatting_options = nil,

@@ -17,6 +17,10 @@ return {
         "typescript-language-server",
         "eslint-lsp",
         "prettier",
+
+        -- CSS tools
+        "css-lsp",
+        "stylelint-lsp",
       },
     },
   },
