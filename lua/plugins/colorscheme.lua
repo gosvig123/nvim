@@ -17,78 +17,140 @@ return {
       },
       -- Ice-themed color modifications
       on_colors = function(colors)
-        -- Darker background colors
-        colors.bg = "#0a0b12"        -- Darker main background
-        colors.bg_dark = "#070810"   -- Even darker background
-        colors.bg_float = "#0d0e16"  -- Darker float background
-        colors.bg_popup = "#0d0e16"  -- Darker popup background
-        colors.bg_sidebar = "#070810" -- Darker sidebar
+        -- Cooler, more sophisticated background colors
+        colors.bg = "#0c0d16"        -- Slightly darker, bluer background
+        colors.bg_dark = "#090a12"   -- Darker background with blue undertone
+        colors.bg_float = "#0f1019"  -- Floating windows
+        colors.bg_popup = "#0f1019"  -- Popups
+        colors.bg_sidebar = "#090a12" -- Sidebar
 
-        -- Higher contrast accent colors
-        colors.blue = "#89d1fa"      -- Brighter blue
-        colors.cyan = "#7aecff"      -- Brighter cyan
-        colors.purple = "#c8b3ff"    -- Brighter purple
-        colors.magenta = "#ff92f0"   -- Brighter magenta
-        colors.green = "#95ffa4"     -- Brighter green
-        colors.teal = "#92ffe1"      -- Brighter teal
-        colors.comment = "#506178"   -- More visible comments
+        -- Refined, cold-themed accent colors
+        colors.blue = "#79b8ff"      -- Softer, ice blue
+        colors.cyan = "#56d4dd"      -- Muted cyan
+        colors.purple = "#b4a5ff"    -- Softer purple
+        colors.magenta = "#79b8ff"   -- Replaced with ice blue (was pink)
+        colors.green = "#7ee2b8"     -- Softer, mint green
+        colors.teal = "#68c7ba"      -- Muted teal
+        colors.comment = "#506178"   -- Keeping good comment visibility
 
-        -- Higher contrast UI elements
-        colors.border = "#1f2133"
-        colors.fg_gutter = "#3b3d57"
-        colors.unused = "#959cbd"
+        -- Refined UI elements
+        colors.border = "#1a1c2a"    -- Subtler border
+        colors.fg_gutter = "#363b47" -- More sophisticated gutter
+        colors.unused = "#8b8fa3"    -- Softer unused
+
+        -- Enhanced indent and structure colors
+        colors.bg_highlight = "#161827"  -- Stronger highlight for active sections
+        colors.fg_gutter = "#404557"     -- More visible gutter
+        colors.border = "#202334"        -- Stronger borders for better structure
       end,
       on_highlights = function(hl, c)
-        -- Enhanced semantic highlighting with higher contrast
+        -- Refined semantic highlighting
         hl.Type = { fg = c.blue, italic = true }
-        hl.Function = { fg = c.magenta, bold = true }
+        hl.Function = { fg = "#68a5ff", bold = true }  -- Ice blue for functions
         hl.Keyword = { fg = c.purple, italic = true }
-        hl.Constant = { fg = "#ffb387" }  -- Brighter orange
+        hl.Constant = { fg = "#e0af68" }  -- Warmer orange for contrast
         hl.String = { fg = c.green }
         hl.Variable = { fg = c.cyan }
 
-        -- Enhanced treesitter highlights
+        -- Matching treesitter highlights
+        hl["@function"] = { fg = "#68a5ff", bold = true }  -- Ice blue for functions
         hl["@variable"] = { fg = c.cyan }
-        hl["@function"] = { fg = c.magenta, bold = true }
         hl["@keyword"] = { fg = c.purple, italic = true }
         hl["@type"] = { fg = c.blue, italic = true }
-        hl["@property"] = { fg = c.teal }
-        hl["@parameter"] = { fg = "#e6eaf4" }  -- Brighter white
+        hl["@property"] = { fg = "#68c7ba" }  -- Softer teal
+        hl["@parameter"] = { fg = "#d8dee9" }  -- Softer white
 
-        -- UI element highlights with more contrast
-        hl.LineNr = { fg = "#4a4d6a" }
-        hl.CursorLine = { bg = "#131520" }
-        hl.CursorLineNr = { fg = "#e6eaf4" }
-        hl.Visual = { bg = "#252842" }
+        -- Enhanced UI elements
+        hl.LineNr = { fg = "#404557" }        -- More subtle line numbers
+        hl.CursorLine = { bg = "#111219" }    -- Slightly bluer cursor line
+        hl.Visual = { bg = "#1f2233" }        -- Cooler visual selection
 
-        -- Brighter diagnostic colors
-        hl.DiagnosticError = { fg = "#ff7a93" }  -- Brighter red
-        hl.DiagnosticWarn = { fg = "#ffb387" }   -- Brighter orange
-        hl.DiagnosticInfo = { fg = "#89d1fa" }   -- Brighter blue
-        hl.DiagnosticHint = { fg = "#92ffe1" }   -- Brighter teal
+        -- Refined diagnostic colors
+        hl.DiagnosticError = { fg = "#ff616e" }  -- Less harsh red
+        hl.DiagnosticWarn = { fg = "#e0af68" }   -- Warmer orange
+        hl.DiagnosticInfo = { fg = "#79b8ff" }   -- Ice blue
+        hl.DiagnosticHint = { fg = "#68c7ba" }   -- Muted teal
 
-        -- Enhanced active line highlighting
+        -- Sophisticated cursor line
         hl.CursorLine = {
-          bg = "#131520",
-          sp = "#7dcfff",
+          bg = "#111219",
+          sp = "#68a5ff",    -- Ice blue underline
           underline = true,
           bold = true,
         }
 
-        -- Brighter line number
+        -- Matching cursor line number
         hl.CursorLineNr = {
-          fg = "#7dcfff",
-          bg = "#131520",
+          fg = "#68a5ff",    -- Ice blue
+          bg = "#111219",
           bold = true,
           italic = true,
         }
 
-        -- Enhanced comment visibility
-        hl.Comment = { fg = c.comment, italic = true }
+        -- Clear comments
+        hl.Comment = { fg = "#506178", italic = true }
 
-        -- Brighter inlay hints
-        hl.LspInlayHint = { fg = "#6b7394", italic = true }
-        hl.InlayHint = { fg = "#6b7394", italic = true }
+        -- Subtle inlay hints
+        hl.LspInlayHint = { fg = "#5a6377", italic = true }
+        hl.InlayHint = { fg = "#5a6377", italic = true }
+
+        -- Enhanced indentation and scope highlighting
+        hl.IndentBlanklineChar = { fg = "#2a2f44" }        -- Darker indent lines
+        hl.IndentBlanklineContextChar = { fg = "#445166" }  -- Brighter context indent
+        hl.IndentBlanklineContextStart = {
+          sp = "#445166",
+          underline = true
+        }
+
+        -- Improved semantic token highlighting
+        hl["@variable.builtin"] = { fg = "#79b8ff", italic = true }  -- Built-in variables
+        hl["@constructor"] = { fg = "#b4a5ff", bold = true }         -- Constructors
+        hl["@field"] = { fg = "#68c7ba" }                           -- Object fields
+        hl["@method"] = { fg = "#68a5ff", bold = true }             -- Methods
+        hl["@namespace"] = { fg = "#7ee2b8", bold = true }          -- Namespaces
+        hl["@operator"] = { fg = "#b4a5ff" }                        -- Operators
+        hl["@parameter"] = { fg = "#e0e4ef" }                       -- Parameters (brighter)
+        hl["@string.special"] = { fg = "#e0af68" }                  -- Special strings
+
+        -- Enhanced scope highlighting
+        hl.MatchParen = {
+          fg = "#79b8ff",
+          bold = true,
+          underline = true
+        }
+
+        -- Improved active line highlighting
+        hl.CursorLine = {
+          bg = "#131520",
+          sp = "#68a5ff",
+          underline = true,
+        }
+
+        -- Better visual selection
+        hl.Visual = {
+          bg = "#232742",  -- More noticeable but still elegant
+          bold = true
+        }
+
+        -- Enhanced fold highlighting
+        hl.Folded = {
+          fg = "#68a5ff",
+          bg = "#161827",
+          italic = true
+        }
+        hl.FoldColumn = { fg = "#445166" }
+
+        -- Enhanced git sign colors
+        hl.GitSignsAdd = { fg = "#4fd6be" }        -- Bright cyan-green for additions
+        hl.GitSignsChange = { fg = "#ffc777" }     -- Warm yellow for changes
+        hl.GitSignsDelete = { fg = "#ff757f" }     -- Soft red for deletions
+        hl.GitSignsUntracked = { fg = "#4fd6be" }  -- Same as add for untracked
+
+        -- Line number highlights for git changes
+        hl.GitSignsAddNr = { fg = "#4fd6be" }
+        hl.GitSignsChangeNr = { fg = "#ffc777" }
+        hl.GitSignsDeleteNr = { fg = "#ff757f" }
+        hl.GitSignsUntrackedNr = { fg = "#4fd6be" }
       end,
     },
   },

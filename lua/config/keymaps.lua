@@ -54,3 +54,30 @@ vim.keymap.set("n", "<leader>oo", function()
     },
   })
 end, { desc = "Document Symbols (right side)" })
+
+-- Git operations (add these to your existing keymaps)
+vim.keymap.set("n", "]h", function()
+  if vim.wo.diff then return "]h" end
+  vim.schedule(function() require("gitsigns").next_hunk() end)
+  return "<Ignore>"
+end, { expr = true, desc = "Next Hunk" })
+
+vim.keymap.set("n", "[h", function()
+  if vim.wo.diff then return "[h" end
+  vim.schedule(function() require("gitsigns").prev_hunk() end)
+  return "<Ignore>"
+end, { expr = true, desc = "Previous Hunk" })
+
+-- Quick hunk actions
+vim.keymap.set("n", "<leader>ghs", require("gitsigns").stage_hunk, { desc = "Stage Hunk" })
+vim.keymap.set("n", "<leader>ghr", require("gitsigns").reset_hunk, { desc = "Reset Hunk" })
+vim.keymap.set("v", "<leader>ghs", function()
+  require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+end, { desc = "Stage Selected Hunks" })
+
+-- Quick file actions
+vim.keymap.set("n", "<leader>gS", require("gitsigns").stage_buffer, { desc = "Stage Buffer" })
+vim.keymap.set("n", "<leader>gR", require("gitsigns").reset_buffer, { desc = "Reset Buffer" })
+
+-- Preview hunk changes
+vim.keymap.set("n", "<leader>ghp", require("gitsigns").preview_hunk, { desc = "Preview Hunk" })
