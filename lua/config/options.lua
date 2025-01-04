@@ -44,4 +44,5 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   end,
 })
 -- Add this keybinding to your keymaps.lua
-vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+vim.keymap.set("n", "<leader>rs", vim.lsp.buf.rename, { desc = "Rename symbol" })
+
