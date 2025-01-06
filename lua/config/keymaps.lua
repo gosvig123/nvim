@@ -26,45 +26,53 @@ vim.keymap.set("v", "el", function()
   vim.api.nvim_win_set_cursor(0, { vim.fn.line("."), col })
 end)
 
-vim.api.nvim_set_keymap("n", "<leader>oa", "<cmd>lua AiderOpen()<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>oa", "<cmd>AiderOpen<CR>", { noremap = true, silent = true })
 
 -- Remap leader cs to leader oo
 vim.keymap.set("n", "<leader>oo", function()
-  require('telescope.builtin').lsp_document_symbols({
-    layout_strategy = 'vertical',
+  require("telescope.builtin").lsp_document_symbols({
+    layout_strategy = "vertical",
     layout_config = {
       width = 0.45,
       height = 0.95,
-      anchor = 'E',
-      prompt_position = 'top',
+      anchor = "E",
+      prompt_position = "top",
       preview_cutoff = 0,
       mirror = true,
       preview_height = 0.7,
     },
     show_line = true,
-    jump_type = 'never',
+    jump_type = "never",
     symbols = {
-      'Class',
-      'Function',
-      'Method',
-      'Constructor',
-      'Interface',
-      'Module',
-      'Variable',
+      "Class",
+      "Function",
+      "Method",
+      "Constructor",
+      "Interface",
+      "Module",
+      "Variable",
     },
   })
 end, { desc = "Document Symbols (right side)" })
 
 -- Git operations (add these to your existing keymaps)
 vim.keymap.set("n", "]h", function()
-  if vim.wo.diff then return "]h" end
-  vim.schedule(function() require("gitsigns").next_hunk() end)
+  if vim.wo.diff then
+    return "]h"
+  end
+  vim.schedule(function()
+    require("gitsigns").next_hunk()
+  end)
   return "<Ignore>"
 end, { expr = true, desc = "Next Hunk" })
 
 vim.keymap.set("n", "[h", function()
-  if vim.wo.diff then return "[h" end
-  vim.schedule(function() require("gitsigns").prev_hunk() end)
+  if vim.wo.diff then
+    return "[h"
+  end
+  vim.schedule(function()
+    require("gitsigns").prev_hunk()
+  end)
   return "<Ignore>"
 end, { expr = true, desc = "Previous Hunk" })
 
