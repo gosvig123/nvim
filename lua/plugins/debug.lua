@@ -127,31 +127,55 @@ return {
         }
       }
 
-      -- Configure Node.js/TypeScript configurations
+      -- Add Chrome debug adapter for React applications
+      dap.adapters["pwa-chrome"] = {
+        type = "server",
+        host = "localhost",
+        port = "${port}",
+        executable = {
+          command = "node",
+          args = {
+            js_debug_path .. "/js-debug/src/dapDebugServer.js",
+            "${port}",
+          },
+        }
+      }
+
+      -- Configure debug configurations
       dap.configurations.javascript = {
         {
-          type = "pwa-node",
+          type = "pwa-chrome",
           request = "launch",
-          name = "Launch Current File (pwa-node)",
-          program = "${file}",
-          cwd = "${workspaceFolder}",
+          name = "Launch Chrome against localhost",
+          url = "http://localhost:3000",
+          webRoot = "${workspaceFolder}",
           sourceMaps = true,
           protocol = "inspector",
-          console = "integratedTerminal",
-          resolveSourceMapLocations = {
-            "${workspaceFolder}/**",
-            "!**/node_modules/**",
+          sourceMapPathOverrides = {
+            -- More specific Next.js mappings
+            ["webpack:///./*"] = "${webRoot}/*",
+            ["webpack:///./~/*"] = "${webRoot}/node_modules/*",
+            ["webpack://?:*/*"] = "${webRoot}/*",
+            ["webpack://_N_E/*"] = "${webRoot}/*",
+            ["webpack://(app-pages-browser)/./*"] = "${webRoot}/*",
+            ["webpack://(app-client)/./*"] = "${webRoot}/*"
           },
-        },
-        {
-          type = "pwa-node",
-          request = "attach",
-          name = "Attach to Process",
-          processId = require("dap.utils").pick_process,
-          cwd = "${workspaceFolder}",
-        },
+          skipFiles = {
+            "<node_internals>/**",
+            "**/node_modules/**",
+            "**/webpack/**"
+          },
+          outFiles = {
+            "${workspaceFolder}/.next/static/chunks/**/*.js",
+            "${workspaceFolder}/.next/server/**/*.js"
+          }
+        }
       }
+
+      -- Share configurations
       dap.configurations.typescript = dap.configurations.javascript
+      dap.configurations.typescriptreact = dap.configurations.javascript
+      dap.configurations.javascriptreact = dap.configurations.javascript
 
       -- Configure debug signs
       vim.fn.sign_define("DapBreakpoint", { text = "🔴", texthl = "DapBreakpoint", linehl = "", numhl = "" })
@@ -176,9 +200,33 @@ return {
 
       -- Add keymaps for initiating debug
       vim.keymap.set("n", "<leader>ds", function()
-        if vim.bo.filetype == "javascript" or vim.bo.filetype == "typescript" then
+        local filetype = vim.bo.filetype
+
+        -- Debug logging
+        vim.notify("Starting debug for filetype: " .. filetype, vim.log.levels.INFO)
+
+        -- Check if DAP is properly loaded
+        local dap_ok, dap = pcall(require, "dap")
+        if not dap_ok then
+          vim.notify("Debug adapter protocol (DAP) not found", vim.log.levels.ERROR)
+          return
+        end
+
+        -- Log available configurations
+        vim.notify("Available configurations: " .. vim.inspect(dap.configurations), vim.log.levels.INFO)
+
+        -- Check if we have a configuration for the current filetype
+        if filetype == "javascript" or filetype == "typescript" or filetype == "typescriptreact" or filetype == "javascriptreact" then
+          if not dap.configurations.javascript then
+            vim.notify("No debug configuration found for JavaScript/TypeScript", vim.log.levels.ERROR)
+            return
+          end
           dap.run(dap.configurations.javascript[1])
-        elseif vim.bo.filetype == "python" then
+        elseif filetype == "python" then
+          if not dap.configurations.python then
+            vim.notify("No debug configuration found for Python", vim.log.levels.ERROR)
+            return
+          end
           dap.run({
             type = "python",
             request = "launch",
@@ -186,6 +234,8 @@ return {
             program = "${file}",
             pythonPath = vim.fn.exepath("python"),
           })
+        else
+          vim.notify("Debugging not configured for filetype: " .. filetype, vim.log.levels.WARN)
         end
       end, { desc = "Start Debugging" })
 
