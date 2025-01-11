@@ -147,7 +147,12 @@ return {
           type = "pwa-chrome",
           request = "launch",
           name = "Launch Chrome against localhost",
-          url = "http://localhost:3000",
+          url = function()
+            local port = vim.fn.input("Port number (default 3000): ")
+            -- Use 3000 as default if no input provided
+            port = port ~= "" and port or "3000"
+            return "http://localhost:" .. port
+          end,
           webRoot = "${workspaceFolder}",
           sourceMaps = true,
           protocol = "inspector",
