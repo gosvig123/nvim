@@ -29,10 +29,11 @@ return {
         },
         prettier = {
           prepend_args = {
-            "--print-width=120",
+            "--print-width=100",
             "--tab-width=2",
-            "--single-quote",
-            "--trailing-comma=es5"
+            "--jsx-single-quote=true",
+            "--single-quote=true",
+            "--bracket-same-line=true"
           }
         },
         isort = {

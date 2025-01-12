@@ -46,3 +46,38 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 -- Add this keybinding to your keymaps.lua
 vim.keymap.set("n", "<leader>rs", vim.lsp.buf.rename, { desc = "Rename symbol" })
 
+-- Add after your existing options
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = '●',
+    spacing = 4,
+    source = "if_many",
+    severity = {
+      min = vim.diagnostic.severity.HINT,
+    },
+  },
+  float = {
+    source = "always",
+    border = "rounded",
+    header = "",
+    prefix = "",
+  },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
+-- Define diagnostic signs
+local signs = {
+  Error = " ",
+  Warn = " ",
+  Hint = " ",
+  Info = " ",
+}
+
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+

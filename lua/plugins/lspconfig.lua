@@ -45,10 +45,10 @@ return {
               enable = true,
             },
             workingDirectory = { mode = "location" },
-            quiet = true,
-            onIgnoredFiles = "off",
+            quiet = false,
+            onIgnoredFiles = "warn",
             problems = {
-              shortenToSingleLine = true
+              shortenToSingleLine = false
             },
             validate = "on",
             rulesCustomizations = {
@@ -61,15 +61,6 @@ return {
           handlers = {
             ["window/showMessageRequest"] = function(_, result)
               return result
-            end,
-            ["textDocument/diagnostic"] = function(err, result, ctx, config)
-              if err then return end
-              if result and result.diagnostics then
-                result.diagnostics = vim.tbl_filter(function(diagnostic)
-                  return not diagnostic.message:match("Failed to load config \"airbnb%-base\"")
-                end, result.diagnostics)
-              end
-              vim.lsp.handlers["textDocument/diagnostic"](err, result, ctx, config)
             end
           }
         },
