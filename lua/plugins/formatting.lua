@@ -35,14 +35,6 @@ return {
             "--trailing-comma=es5"
           }
         },
-        black = {
-          prepend_args = {
-            "--line-length=120",
-            "--fast",
-            "--preview",
-            "--quiet"
-          }
-        },
         isort = {
           prepend_args = {
             "--profile=black",

@@ -71,10 +71,28 @@ return {
 
       -- Configure Python adapter with virtual environment support
       local function get_python_path()
-        -- Try to get virtual environment path
+        -- Try conda environment first
+        local conda_prefix = vim.fn.getenv("CONDA_PREFIX")
+        if conda_prefix and conda_prefix ~= "" then
+          if vim.fn.has("win32") == 1 then
+            return conda_prefix .. "\\python.exe"
+          end
+          return conda_prefix .. "/bin/python"
+        end
+
+        -- Try poetry environment first
+        local poetry_env = vim.fn.system("poetry env info -p 2>/dev/null")
+        if vim.v.shell_error == 0 and poetry_env ~= "" then
+          local path = vim.fn.trim(poetry_env)
+          if vim.fn.has("win32") == 1 then
+            return path .. "\\Scripts\\python.exe"
+          end
+          return path .. "/bin/python"
+        end
+
+        -- Try virtualenv
         local venv = vim.fn.getenv("VIRTUAL_ENV")
         local venv_str = type(venv) == "string" and venv or nil
-
         if venv_str then
           if vim.fn.has("win32") == 1 then
             return venv_str .. "\\Scripts\\python.exe"
@@ -82,7 +100,13 @@ return {
           return venv_str .. "/bin/python"
         end
 
-        -- Fallback to system Python
+        -- Try pyenv
+        local pyenv_path = vim.fn.trim(vim.fn.system("pyenv which python 2>/dev/null"))
+        if vim.v.shell_error == 0 and pyenv_path ~= "" then
+          return pyenv_path
+        end
+
+        -- System Python fallbacks
         local python3 = vim.fn.exepath("python3")
         if python3 and python3 ~= "" then
           return python3
@@ -93,7 +117,6 @@ return {
           return python
         end
 
-        -- Final fallback
         return "python"
       end
 
@@ -108,7 +131,89 @@ return {
           program = "${file}",
           pythonPath = get_python_path(),
           console = "integratedTerminal",
+          justMyCode = false,
+          args = {"-Xfrozen_modules=off"},
+          env = {
+            PYTHONPATH = "${workspaceFolder}${pathSeparator}${env:PYTHONPATH}",
+          },
+          stopOnEntry = false,
+          debugOptions = {
+            "RedirectOutput",
+            "DebugStdLib",
+            "ShowReturnValue",
+          },
         },
+        {
+          type = "python",
+          request = "attach",
+          name = "Attach to Process",
+          connect = function()
+            local host = vim.fn.input("Host (default: 127.0.0.1): ")
+            local port = vim.fn.input("Port (default: 5678): ")
+
+            -- Use defaults if no input provided
+            host = host ~= "" and host or "127.0.0.1"
+            port = port ~= "" and tonumber(port) or 5678
+
+            -- Validate port number
+            if not port or port < 1 or port > 65535 then
+              vim.notify("Invalid port number. Using default port 5678", vim.log.levels.WARN)
+              port = 5678
+            end
+
+            return {
+              host = host,
+              port = port
+            }
+          end,
+          pathMappings = {
+            {
+              localRoot = "${workspaceFolder}",
+              remoteRoot = "."
+            }
+          },
+          justMyCode = false,
+          pythonPath = get_python_path(),
+          debugOptions = {
+            "RedirectOutput",
+            "DebugStdLib",
+            "ShowReturnValue",
+          },
+        },
+        {
+          type = "python",
+          request = "attach",
+          name = "Attach by Process ID",
+          processId = function()
+            local output = vim.fn.system("ps -x | grep python")
+            local lines = vim.split(output, "\n")
+            local processes = {}
+
+            for _, line in ipairs(lines) do
+              local pid = line:match("^%s*(%d+)")
+              if pid then
+                local process_info = line:gsub("^%s*%d+%s*", "")
+                table.insert(processes, { name = process_info, id = tonumber(pid) })
+              end
+            end
+
+            -- Create selection menu for processes
+            return vim.ui.select(processes, {
+              prompt = "Select Python Process:",
+              format_item = function(item)
+                return string.format("%d: %s", item.id, item.name)
+              end,
+            }, function(choice)
+              return choice and choice.id or nil
+            end)
+          end,
+          pythonPath = get_python_path(),
+          debugOptions = {
+            "RedirectOutput",
+            "DebugStdLib",
+            "ShowReturnValue",
+          },
+        }
       }
 
       -- Configure Node.js adapter with proper path resolution
@@ -157,22 +262,27 @@ return {
           sourceMaps = true,
           protocol = "inspector",
           sourceMapPathOverrides = {
-            -- More specific Next.js mappings
+            -- Next.js specific mappings
+            ["webpack://_N_E/./*"] = "${webRoot}/*",
             ["webpack:///./*"] = "${webRoot}/*",
             ["webpack:///./~/*"] = "${webRoot}/node_modules/*",
             ["webpack://?:*/*"] = "${webRoot}/*",
-            ["webpack://_N_E/*"] = "${webRoot}/*",
             ["webpack://(app-pages-browser)/./*"] = "${webRoot}/*",
-            ["webpack://(app-client)/./*"] = "${webRoot}/*"
+            ["webpack://(app-client)/./*"] = "${webRoot}/*",
+            ["webpack://_N_E/*"] = "${webRoot}/*",
+            -- Handle pnpm structure
+            ["webpack:///./node_modules/.pnpm/*"] = "${webRoot}/node_modules/.pnpm/*"
           },
           skipFiles = {
             "<node_internals>/**",
             "**/node_modules/**",
+            "**/.next/**",
             "**/webpack/**"
           },
           outFiles = {
             "${workspaceFolder}/.next/static/chunks/**/*.js",
-            "${workspaceFolder}/.next/server/**/*.js"
+            "${workspaceFolder}/.next/server/**/*.js",
+            "${workspaceFolder}/.next/static/development/**/*.js"
           }
         }
       }
@@ -207,40 +317,40 @@ return {
       vim.keymap.set("n", "<leader>ds", function()
         local filetype = vim.bo.filetype
 
-        -- Debug logging
-        vim.notify("Starting debug for filetype: " .. filetype, vim.log.levels.INFO)
-
-        -- Check if DAP is properly loaded
-        local dap_ok, dap = pcall(require, "dap")
-        if not dap_ok then
-          vim.notify("Debug adapter protocol (DAP) not found", vim.log.levels.ERROR)
-          return
-        end
-
-        -- Log available configurations
-        vim.notify("Available configurations: " .. vim.inspect(dap.configurations), vim.log.levels.INFO)
-
-        -- Check if we have a configuration for the current filetype
-        if filetype == "javascript" or filetype == "typescript" or filetype == "typescriptreact" or filetype == "javascriptreact" then
-          if not dap.configurations.javascript then
-            vim.notify("No debug configuration found for JavaScript/TypeScript", vim.log.levels.ERROR)
-            return
-          end
-          dap.run(dap.configurations.javascript[1])
-        elseif filetype == "python" then
+        if filetype == "python" then
           if not dap.configurations.python then
             vim.notify("No debug configuration found for Python", vim.log.levels.ERROR)
             return
           end
-          dap.run({
-            type = "python",
-            request = "launch",
-            name = "Launch Current File",
-            program = "${file}",
-            pythonPath = vim.fn.exepath("python"),
-          })
-        else
-          vim.notify("Debugging not configured for filetype: " .. filetype, vim.log.levels.WARN)
+
+          -- Verify Python interpreter
+          local python_path = get_python_path()
+          local check_python = vim.fn.system(python_path .. " --version")
+          if vim.v.shell_error ~= 0 then
+            vim.notify("Invalid Python interpreter: " .. python_path, vim.log.levels.ERROR)
+            return
+          end
+
+          -- Create selection menu for Python debug configurations
+          vim.ui.select({
+            { name = "Launch file", index = 1 },
+            { name = "Attach to port", index = 2 },
+            { name = "Attach by Process ID", index = 3 }
+          }, {
+            prompt = "Select Python Debug Configuration:",
+            format_item = function(item)
+              return item.name
+            end,
+          }, function(choice)
+            if choice then
+              local status_ok, err = pcall(function()
+                dap.run(dap.configurations.python[choice.index])
+              end)
+              if not status_ok then
+                vim.notify("Failed to start debugger: " .. tostring(err), vim.log.levels.ERROR)
+              end
+            end
+          end)
         end
       end, { desc = "Start Debugging" })
 
