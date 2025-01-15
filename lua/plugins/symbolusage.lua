@@ -218,10 +218,36 @@ return {
                   local lines = vim.fn.readfile(entry.path)
                   vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
 
-                  -- Set the filetype for syntax highlighting
-                  local ft = vim.filetype.match({ filename = entry.path })
+                  -- Set the filetype for syntax highlighting with special handling for TypeScript
+                  local filename = entry.path
+                  local ft = vim.filetype.match({ filename = filename })
+
+                  -- Special handling for TypeScript files
+                  if vim.fn.fnamemodify(filename, ':e') == 'ts' then
+                    ft = 'typescript'
+                  elseif vim.fn.fnamemodify(filename, ':e') == 'tsx' then
+                    ft = 'typescriptreact'
+                  end
+
                   if ft then
                     vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', ft)
+
+                    -- Enable syntax highlighting
+                    vim.api.nvim_buf_set_option(self.state.bufnr, 'syntax', ft)
+
+                    -- Try to use treesitter if available
+                    local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+                    if ok and parsers.has_parser(ft) then
+                      vim.treesitter.start(self.state.bufnr, ft)
+                    end
+
+                    -- Attach LSP if available
+                    local clients = vim.lsp.get_active_clients()
+                    for _, client in ipairs(clients) do
+                      if client.name == "tsserver" or client.name == "typescript-tools" then
+                        vim.lsp.buf_attach_client(self.state.bufnr, client.id)
+                      end
+                    end
                   end
 
                   -- Highlight the selected line
