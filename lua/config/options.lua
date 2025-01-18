@@ -30,7 +30,7 @@ local js = vim.bo.filetype == "javascript"
 local ts = vim.bo.filetype == "typescript"
 vim.opt.colorcolumn = js and "100" or ts and "100" or "120" -- Add a margin line
 vim.opt.signcolumn = "yes" -- Always show the sign column
-
+vim.g.lazyvim_eslint_auto_format = true
 -- Make the cursor more visible
 vim.opt.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50"
 
@@ -52,7 +52,7 @@ vim.keymap.set("n", "<leader>rs", vim.lsp.buf.rename, { desc = "Rename symbol" }
 -- Add after your existing options
 vim.diagnostic.config({
   virtual_text = {
-    prefix = '●',
+    prefix = "●",
     spacing = 4,
     source = "if_many",
     severity = {
