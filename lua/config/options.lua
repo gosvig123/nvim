@@ -26,14 +26,13 @@ vim.opt.cursorline = true -- Highlight the current line
 vim.opt.cursorlineopt = "both" -- Highlight both line and line number
 vim.opt.cursorcolumn = true -- Add vertical highlight
 -- if js then the margin is 100 else 120
-local js = vim.bo.filetype == "javascript"
-local ts = vim.bo.filetype == "typescript"
-vim.opt.colorcolumn = js and "100" or ts and "100" or "120" -- Add a margin line
 vim.opt.signcolumn = "yes" -- Always show the sign column
 vim.g.lazyvim_eslint_auto_format = true
 -- Make the cursor more visible
 vim.opt.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50"
-
+-- add spell check
+vim.opt.spell = true
+vim.opt.spelllang = "en"
 -- Add a subtle cursor line background in insert mode
 vim.api.nvim_create_autocmd("InsertEnter", {
   callback = function()
