@@ -25,7 +25,10 @@ vim.opt.pumheight = 10 -- Maximum number of items in completion menu
 vim.opt.cursorline = true -- Highlight the current line
 vim.opt.cursorlineopt = "both" -- Highlight both line and line number
 vim.opt.cursorcolumn = true -- Add vertical highlight
-vim.opt.colorcolumn = "120" -- Add a margin line
+-- if js then the margin is 100 else 120
+local js = vim.bo.filetype == "javascript"
+local ts = vim.bo.filetype == "typescript"
+vim.opt.colorcolumn = js and "100" or ts and "100" or "120" -- Add a margin line
 vim.opt.signcolumn = "yes" -- Always show the sign column
 
 -- Make the cursor more visible
@@ -57,7 +60,7 @@ vim.diagnostic.config({
     },
   },
   float = {
-    source = "always",
+    source = "if_many",
     border = "rounded",
     header = "",
     prefix = "",
@@ -80,4 +83,3 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
-

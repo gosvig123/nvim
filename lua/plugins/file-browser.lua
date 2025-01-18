@@ -1,5 +1,5 @@
 return {
-  ---@type LazySpec
+  ---@type table
   {
     "mikavilpas/yazi.nvim",
     event = "VeryLazy",

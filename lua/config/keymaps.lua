@@ -26,8 +26,6 @@ vim.keymap.set("v", "el", function()
   vim.api.nvim_win_set_cursor(0, { vim.fn.line("."), col })
 end)
 
-vim.api.nvim_set_keymap("n", "<leader>oa", "<cmd>AiderOpen<CR>", { noremap = true, silent = true })
-
 -- Remap leader cs to leader oo
 vim.keymap.set("n", "<leader>oo", function()
   require("telescope.builtin").lsp_document_symbols({
@@ -61,7 +59,7 @@ vim.keymap.set("n", "]h", function()
     return "]h"
   end
   vim.schedule(function()
-    require("gitsigns").next_hunk()
+    require("gitsigns").nav_hunk("next")
   end)
   return "<Ignore>"
 end, { expr = true, desc = "Next Hunk" })
@@ -71,7 +69,7 @@ vim.keymap.set("n", "[h", function()
     return "[h"
   end
   vim.schedule(function()
-    require("gitsigns").prev_hunk()
+    require("gitsigns").nav_hunk("prev")
   end)
   return "<Ignore>"
 end, { expr = true, desc = "Previous Hunk" })
