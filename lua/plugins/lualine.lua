@@ -8,7 +8,9 @@ return {
         opts = {
           lsp = {
             auto_attach = true,
-            preference = nil
+            preference = {
+              python = "pyright"  -- Prefer pyright for Python files
+            }
           },
           highlight = true,
           separator = " > ",
