@@ -48,18 +48,47 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 -- Add this keybinding to your keymaps.lua
 vim.keymap.set("n", "<leader>rs", vim.lsp.buf.rename, { desc = "Rename symbol" })
 
--- Add after your existing options
+-- Python LSP configuration
+vim.g.lazyvim_python_lsp = "pyright"
+vim.g.lazyvim_python_formatter = "black"
+vim.g.lazyvim_python_linter = "ruff"
+vim.g.lazyvim_python_mypy = "mypy"
+
+-- Python virtual environment handling
+vim.g.python3_host_prog = vim.fn.expand("$CONDA_PREFIX/bin/python3")
+
+-- Automatically detect and use virtual environment
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    -- Check for conda environment
+    local conda_prefix = vim.fn.environ()["CONDA_PREFIX"]
+    if conda_prefix then
+      vim.g.python3_host_prog = conda_prefix .. "/bin/python3"
+    else
+      -- Check for other virtual environments
+      local venv_path = vim.fn.finddir("venv", vim.fn.getcwd() .. ";")
+      local poetry_venv = vim.fn.trim(vim.fn.system("poetry env info -p"))
+
+      if venv_path ~= "" then
+        vim.g.python3_host_prog = vim.fn.getcwd() .. "/" .. venv_path .. "/bin/python3"
+      elseif poetry_venv ~= "" and poetry_venv:match("^/") then
+        vim.g.python3_host_prog = poetry_venv .. "/bin/python3"
+      end
+    end
+  end,
+})
+
 vim.diagnostic.config({
   virtual_text = {
     prefix = "●",
     spacing = 4,
-    source = "if_many",
+    source = "always",
     severity = {
       min = vim.diagnostic.severity.HINT,
     },
   },
   float = {
-    source = "if_many",
+    source = "always",
     border = "rounded",
     header = "",
     prefix = "",
@@ -82,3 +111,21 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+-- Configure diagnostic settings for pylyzer
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    -- Disable all pylyzer diagnostics
+    vim.diagnostic.config({
+      virtual_text = {
+        format = function(diagnostic)
+          if diagnostic.source == "pylyzer" then
+            return nil  -- This will hide pylyzer diagnostics
+          end
+          return diagnostic.message
+        end,
+      },
+    }, vim.api.nvim_get_current_buf())
+  end,
+})
