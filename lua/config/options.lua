@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 vim.keymap.set("n", "<leader>rs", vim.lsp.buf.rename, { desc = "Rename symbol" })
 
 -- Python LSP configuration
-vim.g.lazyvim_python_lsp = "pyright"
+vim.g.lazyvim_python_lsp = "basedpyright"
 vim.g.lazyvim_python_formatter = "black"
 vim.g.lazyvim_python_linter = "ruff"
 vim.g.lazyvim_python_mypy = "mypy"
@@ -82,13 +82,13 @@ vim.diagnostic.config({
   virtual_text = {
     prefix = "●",
     spacing = 4,
-    source = "always",
+    source = true,
     severity = {
       min = vim.diagnostic.severity.HINT,
     },
   },
   float = {
-    source = "always",
+    source = true,
     border = "rounded",
     header = "",
     prefix = "",
@@ -112,20 +112,13 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
--- Configure diagnostic settings for pylyzer
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "python",
-  callback = function()
-    -- Disable all pylyzer diagnostics
-    vim.diagnostic.config({
-      virtual_text = {
-        format = function(diagnostic)
-          if diagnostic.source == "pylyzer" then
-            return nil  -- This will hide pylyzer diagnostics
-          end
-          return diagnostic.message
-        end,
-      },
-    }, vim.api.nvim_get_current_buf())
-  end,
-})
+vim.opt.undofile = true
+vim.opt.updatetime = 100
+vim.opt.timeoutlen = 300
+-- manage undo files
+vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
+vim.opt.undofile = true
+vim.opt.undolevels = 1000
+vim.opt.undoreload = 10000
