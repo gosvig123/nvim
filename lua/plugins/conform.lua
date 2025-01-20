@@ -2,23 +2,20 @@ return {
   "stevearc/conform.nvim",
   opts = {
     formatters_by_ft = {
-      javascript = { "prettier", "eslint_d" },
-      typescript = { "prettier", "eslint_d" },
-      javascriptreact = { "prettier", "eslint_d" },
-      typescriptreact = { "prettier", "eslint_d" },
-      css = { "prettier" },
-      html = { "prettier" },
-      json = { "prettier" },
-      yaml = { "prettier" },
-      markdown = { "prettier" },
+      javascript = { { "eslint", "prettier" } },
+      typescript = { { "eslint", "prettier" } },
+      javascriptreact = { { "eslint", "prettier" } },
+      typescriptreact = { { "eslint", "prettier" } },
     },
     formatters = {
-      prettier = {
-        prepend_args = { "--single-quote", "true" },
-      },
-      eslint_d = {
+      eslint = {
         command = "eslint_d",
-        args = { "--fix-to-stdout", "--stdin", "--stdin-filename", "$FILENAME" },
+        args = {
+          "--fix",
+          "--stdin",
+          "--stdin-filepath",
+          "$FILENAME",
+        },
         stdin = true,
         cwd = require("conform.util").root_file({
           ".eslintrc",
@@ -26,6 +23,23 @@ return {
           ".eslintrc.json",
         }),
       },
+      prettier = {
+        command = "prettier",
+        args = {
+          "--stdin-filepath",
+          "$FILENAME",
+          "--config-precedence",
+          "prefer-file",
+        },
+        stdin = true,
+        cwd = require("conform.util").root_file({
+          ".prettierrc",
+          ".prettierrc.js",
+          ".prettierrc.json",
+        }),
+      },
     },
+    -- Log level for debugging
+    log_level = vim.log.levels.DEBUG,
   },
 }
