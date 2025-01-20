@@ -4,6 +4,7 @@
     "lazyvim.plugins.extras.ai.supermaven",
     "lazyvim.plugins.extras.coding.luasnip",
     "lazyvim.plugins.extras.dap.core",
+    "lazyvim.plugins.extras.dap.nlua",
     "lazyvim.plugins.extras.formatting.black",
     "lazyvim.plugins.extras.lang.json",
     "lazyvim.plugins.extras.lang.markdown",
@@ -11,7 +12,8 @@
     "lazyvim.plugins.extras.lang.typescript",
     "lazyvim.plugins.extras.linting.eslint",
     "lazyvim.plugins.extras.lsp.none-ls",
-    "lazyvim.plugins.extras.util.octo"
+    "lazyvim.plugins.extras.util.octo",
+    "lazyvim.plugins.extras.util.rest"
   ],
   "news": {
     "NEWS.md": "10960"
