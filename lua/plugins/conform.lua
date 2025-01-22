@@ -11,9 +11,9 @@ return {
       eslint = {
         command = "eslint_d",
         args = {
-          "--fix",
+          "--fix-dry-run",
           "--stdin",
-          "--stdin-filepath",
+          "--stdin-filename",
           "$FILENAME",
         },
         stdin = true,
@@ -25,12 +25,24 @@ return {
       },
       prettier = {
         command = "prettier",
-        args = {
-          "--stdin-filepath",
-          "$FILENAME",
-          "--config-precedence",
-          "prefer-file",
-        },
+        args = function(self, ctx)
+          local ext = vim.fn.fnamemodify(ctx.filename, ":e")
+          local parser = ({
+            js = "babel",
+            jsx = "babel",
+            tsx = "typescript",
+            ts = "typescript",
+          })[ext] or ext
+
+          return {
+            "--stdin-filepath",
+            ctx.filename,
+            "--parser",
+            parser,
+            "--config-precedence",
+            "prefer-file",
+          }
+        end,
         stdin = true,
         cwd = require("conform.util").root_file({
           ".prettierrc",
