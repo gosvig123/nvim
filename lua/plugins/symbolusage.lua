@@ -11,15 +11,20 @@ return {
       local function text_format(symbol)
         local fragments = {}
 
-        if symbol.references then
-          local usage = symbol.references <= 1 and 'usage' or 'usages'
-          local num = symbol.references == 0 and 'no' or symbol.references
-          table.insert(fragments, ('%s %s'):format(num, usage))
+        -- Show definition count (typically 0 or 1)
+        if symbol.definition and symbol.definition > 1 then
+          local definition = "definitions"
+          table.insert(fragments, ("%d %s"):format(symbol.definition, definition))
         end
 
-        return table.concat(fragments, ', ')
-      end
+        -- Show references count
+        if symbol.references and symbol.references > 0 then
+          local usage = symbol.references == 1 and "usage" or "usages"
+          table.insert(fragments, ("%d %s"):format(symbol.references, usage))
+        end
 
+        return #fragments > 0 and table.concat(fragments, ", ") or "no usages"
+      end
       require("symbol-usage").setup({
         text_format = text_format,
         kinds = {
@@ -29,21 +34,24 @@ return {
           SymbolKind.Interface,
           SymbolKind.Module,
           SymbolKind.Variable,
+          SymbolKind.TypeAlias, -- TypeScript type aliases
+          SymbolKind.Enum, -- TypeScript enums
+          SymbolKind.Struct, -- TypeScript object types
+          SymbolKind.Property, -- TypeScript object properties
+          SymbolKind.EnumMember, -- TypeScript enum members
         },
         references = { enabled = true, include_declaration = false },
-        definition = { enabled = false },
+        definition = { enabled = true }, -- Track definitions
         implementation = { enabled = false },
-        vt_position = 'end_of_line',
+        vt_position = "end_of_line",
         display_virtual_text = true,
         hl = { link = "Comment" },
         request_pending_text = "calculating...",
-        symbol_request_pos = 'end',
-      })
-
-      -- Add this at the top level (before any functions)
+        symbol_request_pos = "end",
+      }) -- Add this at the top level (before any functions)
       local float_position = "top" -- Track current position
 
-      -- Modify the create_float_window function
+      -- Modify the create_float_window functionse
       local function create_float_window()
         -- Calculate dimensions for right-side float
         local width = math.floor(vim.o.columns * 0.45)
@@ -83,30 +91,6 @@ return {
         vim.api.nvim_win_set_option(win, 'cursorline', true)
 
         return buf, win
-      end
-
-      -- Add this helper function to get the current symbol name
-      local function get_current_symbol_name()
-        local params = vim.lsp.util.make_position_params()
-        local current_word = vim.fn.expand('<cword>')
-
-        -- Try to get symbol info from LSP
-        local result = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1000)
-        if result and #result > 0 then
-          for _, res in pairs(result) do
-            if res.result then
-              for _, symbol in ipairs(res.result) do
-                -- Check if symbol contains the current word
-                if symbol.name and symbol.name:match(current_word) then
-                  return symbol.name
-                end
-              end
-            end
-          end
-        end
-
-        -- Fallback to current word under cursor
-        return current_word
       end
 
       -- Modify the show_location_in_float function
