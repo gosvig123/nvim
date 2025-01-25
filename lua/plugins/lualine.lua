@@ -86,6 +86,14 @@ return {
                 local row, col = unpack(vim.api.nvim_win_get_cursor(0))
                 return string.format("Ln %d, Col %d", row, col + 1)
               end,
+            },
+            {
+              function()
+                return os.date("%H:%M")  -- 24-hour format
+                -- For 12-hour format use: return os.date("%I:%M %p")
+              end,
+              icon = "🕐",  -- Optional clock icon
+              color = { fg = "#89b4fa" },  -- Optional custom color
             }
           },
           lualine_y = {},

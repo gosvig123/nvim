@@ -33,6 +33,8 @@ vim.opt.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r
 -- add spell check
 vim.opt.spell = true
 vim.opt.spelllang = "en"
+-- set wrap
+vim.opt.wrap = true
 -- Add a subtle cursor line background in insert mode
 vim.api.nvim_create_autocmd("InsertEnter", {
   callback = function()

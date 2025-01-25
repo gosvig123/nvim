@@ -8,15 +8,18 @@ return {
       user = user:sub(1, 1):upper() .. user:sub(2)
       return {
         auto_insert_mode = true,
-        question_header = "  " .. user .. " ",
-        answer_header = "  Copilot ",
+        question_header = "  " .. user .. " ",
+        answer_header = "  Copilot ",
         window = {
-          width = 0.4,
           layout = "float",
+          relative = "editor",
+          width = math.floor(vim.o.columns * 0.4),
+          height = math.floor(vim.o.lines * 0.4),
           border = "rounded",
-          row = 0, -- Position at the top
-          col = vim.o.columns - math.floor(vim.o.columns * 0.4), -- Position at the right
+          row = 1,
+          col = math.floor(vim.o.columns * 0.6),
         },
+        close_on_exit = true,
       }
     end,
   },

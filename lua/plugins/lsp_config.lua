@@ -2,6 +2,16 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      setup = {
+        ["*"] = function(server, opts)
+          opts.handlers = opts.handlers or {}
+          opts.handlers["textDocument/semanticTokens/full"] = function(err, result, ctx, config)
+            if vim.api.nvim_buf_is_valid(ctx.bufnr) then
+              vim.lsp.semantic_tokens.on_full(err, result, ctx, config)
+            end
+          end
+        end
+      },
       servers = {
         tsserver = {
           settings = {
