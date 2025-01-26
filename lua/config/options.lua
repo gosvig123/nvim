@@ -115,12 +115,6 @@ for type, icon in pairs(signs) do
 end
 
 vim.opt.undofile = true
-vim.opt.updatetime = 100
-vim.opt.timeoutlen = 300
--- manage undo files
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
-vim.opt.undofile = true
-vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
-vim.opt.undofile = true
 vim.opt.undolevels = 1000
 vim.opt.undoreload = 10000
