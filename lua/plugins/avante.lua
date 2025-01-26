@@ -9,19 +9,6 @@ return {
       endpoint = "https://api.deepseek.com/v1",
       model = "deepseek-chat",
       api_key_name = "DEEPSEEK_API_KEY",
-      temperature = 0.3,
-      max_tokens = 4096,
-      frequency_penalty = 0.5,
-      presence_penalty = 0.5,
-    },
-    context = {
-      providers = {
-        "copilot",
-        "buffer",
-        "workspace",
-        "git_diff",
-        "nearest",
-      },
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
