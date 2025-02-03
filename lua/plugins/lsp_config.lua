@@ -2,8 +2,23 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      capabilities = {
+        textDocument = {
+          inlayHint = {
+            dynamicRegistration = true
+          }
+        }
+      },
       setup = {
         ["*"] = function(server, opts)
+          opts.capabilities = vim.tbl_deep_extend("force", opts.capabilities or {}, {
+            textDocument = {
+              codeAction = { dynamicRegistration = true },
+              documentHighlight = { dynamicRegistration = true },
+              codeLens = { dynamicRegistration = true }
+            }
+          })
+
           opts.handlers = opts.handlers or {}
           opts.handlers["textDocument/semanticTokens/full"] = function(err, result, ctx, config)
             if vim.api.nvim_buf_is_valid(ctx.bufnr) then
@@ -14,23 +29,35 @@ return {
       },
       servers = {
         tsserver = {
+          suggest = {
+            autoImports = true,
+            completeFunctionCalls = true,
+          },
           settings = {
             typescript = {
               inlayHints = {
-                includeInlayParameterNameHints = "all",
+                parameterNames = {
+                  enabled = "all"
+                },
                 includeInlayFunctionParameterTypeHints = true,
                 includeInlayVariableTypeHints = true,
                 includeInlayPropertyDeclarationTypeHints = true,
                 includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
               },
             },
             javascript = {
               inlayHints = {
-                includeInlayParameterNameHints = "all",
+                parameterNames = {
+                  enabled = "all"
+                },
                 includeInlayFunctionParameterTypeHints = true,
                 includeInlayVariableTypeHints = true,
                 includeInlayPropertyDeclarationTypeHints = true,
                 includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
               },
             },
           },
@@ -56,7 +83,7 @@ return {
                   argumentTypes = true,
                   includeCallExpressions = true,
                   includeMemberExpressions = true,
-                  geneicTypes = true,
+                  genericTypes = true,
                   tupleTypes = true,
                   dictionaryTypes = true,
                   listTypes = true,
@@ -78,6 +105,11 @@ return {
                   callableTypes = true,
                   selfParameterTypes = true,
                   callArgumentNames = true,
+                  pytestParameters = true,
+                },
+                diagnosticSeverityOverrides = {
+                  reportUnusedImport = "warning",
+                  reportMissingImports = "error",
                 },
               },
             },
@@ -86,4 +118,22 @@ return {
       },
     },
   },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      autoformat = true,
+      format = {
+        timeout_ms = 5000,
+      },
+      diagnostics = {
+        virtual_text = {
+          prefix = "●",
+          spacing = 4,
+        },
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+      }
+    }
+  }
 }
