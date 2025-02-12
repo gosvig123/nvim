@@ -1,5 +1,8 @@
 return {
   "supermaven-inc/supermaven-nvim",
+  cmd = {
+    "SuperMavenUsePro",
+  },
   event = "VeryLazy",
   config = function()
     vim.notify("Setting up supermaven-nvim")
