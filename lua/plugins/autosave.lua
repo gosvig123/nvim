@@ -6,10 +6,9 @@ return {
         enabled = true,
         execution_message = {
           message = function()
-            return "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S")
+            return "Autosaving..."
           end,
-          dim = 0.18,
-          cleaning_interval = 1250,
+          cleaning_interval = 1,
         },
         trigger_events = { "InsertLeave", "TextChanged" },
         debounce_delay = 135,
