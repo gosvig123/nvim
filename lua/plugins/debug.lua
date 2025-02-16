@@ -9,6 +9,7 @@ return {
       "nvim-telescope/telescope-dap.nvim",
       "mxsdev/nvim-dap-vscode-js",
       "nvim-neotest/nvim-nio",
+      "mfussenegger/nvim-dap-python",
     },
     keys = {
       { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
@@ -145,6 +146,52 @@ return {
           },
         }
       end
+
+      -- Python Debugging Setup with Conda support
+      require("dap-python").setup(
+        vim.env.CONDA_PREFIX and
+        vim.env.CONDA_PREFIX .. "/bin/python" or
+        vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+      )
+
+      dap.adapters.python = {
+        type = "executable",
+        command = "python",
+        args = { "-m", "debugpy.adapter" }
+      }
+
+      dap.configurations.python = {
+        {
+          type = "python",
+          request = "launch",
+          name = "Launch Python File",
+          program = "${file}",
+          pythonPath = function()
+            return vim.env.CONDA_PREFIX and
+              vim.env.CONDA_PREFIX .. "/bin/python" or
+              vim.fn.exepath("python") or
+              "/usr/bin/python"
+          end,
+          args = function()
+            local input = vim.fn.input("Input arguments: ")
+            return vim.split(input, " +")
+          end,
+          console = "integratedTerminal",
+          justMyCode = false,
+          autoReload = { enable = true }
+        },
+        {
+          type = "python",
+          request = "attach",
+          name = "Attach to Process",
+          processId = require("dap.utils").pick_process,
+          pythonPath = function()
+            return vim.env.CONDA_PREFIX and
+              vim.env.CONDA_PREFIX .. "/bin/python" or
+              vim.fn.exepath("python")
+          end,
+        }
+      }
 
       -- Configure debug signs with emojis
       vim.fn.sign_define("DapBreakpoint", { text = "🔴", texthl = "DapBreakpoint", linehl = "", numhl = "" })
