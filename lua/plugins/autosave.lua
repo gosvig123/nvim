@@ -11,7 +11,7 @@ return {
           cleaning_interval = 1,
         },
         trigger_events = { "InsertLeave", "TextChanged" },
-        debounce_delay = 135,
+        debounce_delay = 500,
       })
     end,
   },
