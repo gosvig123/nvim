@@ -32,7 +32,7 @@ vim.g.lazyvim_eslint_auto_format = true
 vim.opt.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50"
 -- add spell check
 vim.opt.spell = true
-vim.opt.spelllang = "en"
+vim.opt.spelllang = ""
 -- set wrap
 vim.opt.wrap = true
 -- Add a subtle cursor line background in insert mode
