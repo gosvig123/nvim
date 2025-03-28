@@ -100,3 +100,10 @@ end, { desc = "Reset Buffer" })
 vim.keymap.set("n", "<leader>ghp", function()
   require("gitsigns").preview_hunk()
 end, { desc = "Preview Hunk" })
+
+-- Chat integration
+vim.keymap.set("n", "<leader>ai", ":Augment chat ", { desc = "AI Chat Prompt" })
+vim.keymap.set("n", "<leader>an", ":Augment chat-new<CR>", { desc = "New AI Chat" })
+
+-- Completion control
+vim.keymap.set("i", "<C-Space>", "<cmd>call augment#Accept()<CR>", { desc = "Accept AI Suggestion" })

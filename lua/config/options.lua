@@ -118,3 +118,12 @@ vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undolevels = 1000
 vim.opt.undoreload = 10000
+
+-- Add this anywhere before plugin loading
+vim.g.augment_workspace_folders = {
+  vim.fn.expand("~/.config/nvim"),  -- Example path
+  vim.fn.getcwd()  -- Current project
+}
+
+-- Add to your keymaps config
+vim.keymap.set('i', '<Tab>', 'v:lua.augment#Accept()', { expr = true })
