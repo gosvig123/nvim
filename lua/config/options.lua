@@ -27,7 +27,7 @@ vim.opt.cursorlineopt = "both" -- Highlight both line and line number
 vim.opt.cursorcolumn = true -- Add vertical highlight
 -- if js then the margin is 100 else 120
 vim.opt.signcolumn = "yes" -- Always show the sign column
-vim.g.lazyvim_eslint_auto_format = true
+vim.g.lazyvim_eslint_auto_format = false
 -- Make the cursor more visible
 vim.opt.guicursor = "n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50"
 -- add spell check
@@ -51,10 +51,8 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 vim.keymap.set("n", "<leader>rs", vim.lsp.buf.rename, { desc = "Rename symbol" })
 
 -- Python LSP configuration
-vim.g.lazyvim_python_lsp = "basedpyright"
 vim.g.lazyvim_python_formatter = "black"
 vim.g.lazyvim_python_linter = "ruff"
-vim.g.lazyvim_python_mypy = "mypy"
 
 -- Python virtual environment handling
 vim.g.python3_host_prog = vim.fn.expand("$CONDA_PREFIX/bin/python3")
