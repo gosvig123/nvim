@@ -24,6 +24,7 @@ return {
         expand = ">",
         collapse = "<",
         collapse_all = "zM",
+        jump_vsplit = "<CR>", -- Jump to location in vsplit
       },
     },
     config = function(_, opts)
