@@ -112,6 +112,116 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
+-- Define custom highlight groups for function hints
+vim.api.nvim_set_hl(0, "FunctionHintFloat", { bg = "#0f1019", fg = "#d8dee9" }) -- Slightly different background
+vim.api.nvim_set_hl(0, "FunctionHintBorder", { bg = "NONE", fg = "#79b8ff", bold = true }) -- Bright blue border
+
+-- Enhanced function hint with custom styling
+vim.keymap.set("n", "<leader>fh", function()
+  -- Override the default hover handler to customize appearance
+  local params = vim.lsp.util.make_position_params()
+
+  vim.lsp.buf_request(0, "textDocument/hover", params, function(err, result, ctx, config)
+    if not result or not result.contents or vim.tbl_isempty(result.contents) then
+      vim.notify("No hover information available", vim.log.levels.INFO)
+      return
+    end
+
+    -- Convert hover contents to markdown
+    local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+
+    -- Add a title line to make it clear this is a function hint
+    table.insert(markdown_lines, 1, "## Function Information")
+    table.insert(markdown_lines, 2, "")
+
+    -- Create a custom floating window with distinct styling
+    local bufnr, winnr = vim.lsp.util.open_floating_preview(
+      markdown_lines,
+      "markdown",
+      {
+        border = "double",        -- Use a double-line border for distinction
+        max_width = 80,           -- Limit width for better readability
+        max_height = 20,          -- Limit height
+        focus = false,            -- Don't focus the floating window
+        title = " Function Hint ",  -- Add a title
+        title_pos = "center",     -- Center the title
+      }
+    )
+
+    -- Apply custom highlight to the window
+    vim.api.nvim_win_set_option(winnr, "winhighlight", "Normal:FunctionHintFloat,FloatBorder:FunctionHintBorder")
+
+    -- Add a keymap to close the window with 'q' or Escape
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', '<cmd>close<CR>', { noremap = true, silent = true })
+
+    return bufnr, winnr
+  end)
+end, { desc = "Show enhanced function hint" })
+
+-- Enhanced signature help with custom styling
+vim.keymap.set("n", "<leader>fs", function()
+  -- Override the default signature help handler to customize appearance
+  local params = vim.lsp.util.make_position_params()
+
+  vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result, ctx, config)
+    if not result or not result.signatures or vim.tbl_isempty(result.signatures) then
+      vim.notify("No signature information available", vim.log.levels.INFO)
+      return
+    end
+
+    -- Format the signature information
+    local lines = vim.lsp.util.convert_signature_help_to_markdown_lines(result)
+    if vim.tbl_isempty(lines) then
+      vim.notify("No signature information available", vim.log.levels.INFO)
+      return
+    end
+
+    -- Add a title line to make it clear this is a signature hint
+    table.insert(lines, 1, "## Function Signature")
+    table.insert(lines, 2, "")
+
+    -- Create a custom floating window with distinct styling
+    local bufnr, winnr = vim.lsp.util.open_floating_preview(
+      lines,
+      "markdown",
+      {
+        border = "single",        -- Use a single-line border for distinction
+        max_width = 80,           -- Limit width for better readability
+        max_height = 20,          -- Limit height
+        focus = false,            -- Don't focus the floating window
+        title = " Signature Help ",  -- Add a title
+        title_pos = "center",     -- Center the title
+      }
+    )
+
+    -- Apply custom highlight to the window
+    vim.api.nvim_win_set_option(winnr, "winhighlight", "Normal:SignatureHelpFloat,FloatBorder:SignatureHelpBorder")
+
+    -- Add a keymap to close the window with 'q' or Escape
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', '<cmd>close<CR>', { noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Esc>', '<cmd>close<CR>', { noremap = true, silent = true })
+
+    return bufnr, winnr
+  end)
+end, { desc = "Show enhanced function signature" })
+
+-- Define custom highlight groups for signature help
+vim.api.nvim_set_hl(0, "SignatureHelpFloat", { bg = "#0f1019", fg = "#d8dee9" }) -- Slightly different background
+vim.api.nvim_set_hl(0, "SignatureHelpBorder", { bg = "NONE", fg = "#7ee2b8", bold = true }) -- Green border for signature help
+
+-- Make sure our custom highlights persist when colorscheme changes
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function()
+    -- Function hint highlights
+    vim.api.nvim_set_hl(0, "FunctionHintFloat", { bg = "#0f1019", fg = "#d8dee9" })
+    vim.api.nvim_set_hl(0, "FunctionHintBorder", { bg = "NONE", fg = "#79b8ff", bold = true })
+
+    -- Signature help highlights
+    vim.api.nvim_set_hl(0, "SignatureHelpFloat", { bg = "#0f1019", fg = "#d8dee9" })
+    vim.api.nvim_set_hl(0, "SignatureHelpBorder", { bg = "NONE", fg = "#7ee2b8", bold = true })
+  end,
+})
+
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
 vim.opt.undolevels = 1000
