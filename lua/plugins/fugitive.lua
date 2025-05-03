@@ -13,7 +13,7 @@ return {
       vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>", { desc = "Git Diff" })
       vim.keymap.set("n", "<leader>gb", ":Git blame<CR>", { desc = "Git Blame" })
       -- For staging hunks or parts of a file, you can use visual mode + :Git add
-      vim.keymap.set("v", "<leader>ghs", ":Git add -p %<CR>", { desc = "Stage Selection" })
+      vim.keymap.set("n", "<leader>ghp", ":Git add -p %<CR>", { desc = "Stage Hunks Interactively for Current File" })
     end,
-  }
+  },
 }
