@@ -5,15 +5,23 @@
       "args": [
         "-y",
         "--node-options=--experimental-vm-modules",
-        "@upstash/context7-mcp@1.0.6"
+        "@upstash/context7-mcp@1.0.6",
+        "--port",
+        "37373",
+        "--mode",
+        "http"
       ]
     },
     "sequential-thinking": {
       "command": "npx",
       "args": [
-            "-y",
-            "@modelcontextprotocol/server-sequential-thinking"
-          ]
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking",
+        "--port",
+        "37373",
+        "--mode",
+        "http"
+      ]
     },
     "supabase": {
       "command": "npx",
@@ -21,19 +29,86 @@
         "-y",
         "@supabase/mcp-server-supabase@latest",
         "--access-token",
-        "sbp_a4d10754d7bb5ec6ce9fe9b3ff6da5658914026d"
+        "sbp_a4d10754d7bb5ec6ce9fe9b3ff6da5658914026d",
+        "--port",
+        "37373",
+        "--mode",
+        "http"
       ]
     },
     "filesystem": {
-      "github.com/modelcontextprotocol/servers/tree/main/src/filesystem": {
-        "command": "npx",
-        "args": [
-          "-y",
-          "@modelcontextprotocol/server-filesystem",
-          "/Users/kristian/.mcphub/servers"
-        ],
-        "disabled": false
-      }
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "--port",
+        "37373",
+        "--mode",
+        "http",
+        "/Users/kristian/.mcphub/servers",
+        "/Users/kristian/.config/nvim",
+        "/Users/kristian/Developer",
+        "/Users/kristian/Developer/.aider.tags.cache.v4",
+        "/Users/kristian/Developer/.git",
+        "/Users/kristian/Developer/.goose",
+        "/Users/kristian/Developer/.vscode",
+        "/Users/kristian/Developer/MACD-trading",
+        "/Users/kristian/Developer/ai-filter-interview-website-main",
+        "/Users/kristian/Developer/algo_trading",
+        "/Users/kristian/Developer/alpaca-trading",
+        "/Users/kristian/Developer/appli-filter",
+        "/Users/kristian/Developer/arol",
+        "/Users/kristian/Developer/atlaac",
+        "/Users/kristian/Developer/atlaacs",
+        "/Users/kristian/Developer/candit",
+        "/Users/kristian/Developer/chessbot",
+        "/Users/kristian/Developer/config",
+        "/Users/kristian/Developer/crm4all",
+        "/Users/kristian/Developer/dashboard-ai-recruiter",
+        "/Users/kristian/Developer/extensions",
+        "/Users/kristian/Developer/generic-ai-recruiter-frontend",
+        "/Users/kristian/Developer/hackbcn-candit",
+        "/Users/kristian/Developer/hacuna",
+        "/Users/kristian/Developer/interviewTests",
+        "/Users/kristian/Developer/krist-gpt",
+        "/Users/kristian/Developer/language_analysis",
+        "/Users/kristian/Developer/linkedin-auth",
+        "/Users/kristian/Developer/linkedin-on-autopilot",
+        "/Users/kristian/Developer/llm-course",
+        "/Users/kristian/Developer/logs",
+        "/Users/kristian/Developer/mcp_trading",
+        "/Users/kristian/Developer/ms_teams_viewer",
+        "/Users/kristian/Developer/my-bot",
+        "/Users/kristian/Developer/precourse",
+        "/Users/kristian/Developer/python-chess",
+        "/Users/kristian/Developer/python_chess_engine",
+        "/Users/kristian/Developer/racingToday",
+        "/Users/kristian/Developer/scripts",
+        "/Users/kristian/Developer/siders",
+        "/Users/kristian/Developer/simple-trading",
+        "/Users/kristian/Developer/simplecontent",
+        "/Users/kristian/Developer/solid_hire",
+        "/Users/kristian/Developer/src",
+        "/Users/kristian/Developer/technical-test-nodejs-backend",
+        "/Users/kristian/Developer/tests",
+        "/Users/kristian/Developer/trading-bot",
+        "/Users/kristian/Developer/transcription",
+        "/Users/kristian/Developer/virality_ranker",
+        "/Users/kristian/Developer/work"
+      ],
+      "disabled": false
+    },
+    "neovim": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-neovim",
+        "--port",
+        "37373",
+        "--mode",
+        "http"
+      ],
+      "disabled": false
     }
   }
 }
