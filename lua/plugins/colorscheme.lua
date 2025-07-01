@@ -5,6 +5,7 @@ return {
     priority = 1000,
     opts = {
       style = "night",
+      transparent = true,
       -- Enable more semantic token highlights
       semantic_tokens = true,
       styles = {
