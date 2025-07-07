@@ -6,6 +6,13 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
   callback = function()
     if vim.bo.modified and vim.bo.modifiable and not vim.bo.readonly then
       pcall(vim.cmd, "silent write")
+      -- Debug: print when Rust files are saved
+      if vim.bo.filetype == "rust" then
+        -- Force LSP diagnostics refresh like manual :w
+        vim.defer_fn(function()
+          vim.cmd("doautocmd BufWritePost")
+        end, 50)
+      end
     end
   end,
 })
